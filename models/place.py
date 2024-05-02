@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 """This is the place class"""
+from models.amenity import Amenity
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, Integer, Float, String, ForeignKey, Table
 from sqlalchemy.orm import relationship
@@ -33,7 +34,8 @@ class Place(BaseModel, Base):
         amenity_ids = []
         reviews = relationship('Review', backref='place', cascade='delete')
         amenities = relationship('Amenity', secondary=place_amenity, viewonly=False, back_populates='place_amenities')
-    
+
+
         @property
         def reviews(self):
             """returns the list of Review instances with
@@ -52,7 +54,7 @@ class Place(BaseModel, Base):
             Place.amenities
             """
             amenities_list = []
-            rev_list = models.storage.all(models.amenity.Amenity).values()
+            rev_list = models.storage.all(Amenity).values()
             for revs in rev_list:
                 if revs.place_id == self.id:
                     amenities_list.append(revs)
