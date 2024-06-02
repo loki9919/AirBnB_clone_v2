@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """New engine DBStorage"""
-import json
-from models.base_model import BaseModel, Base
+
+from models.base_model import Base
 from models.user import User
 from models.state import State
 from models.city import City
@@ -23,6 +23,7 @@ class DBStorage:
     __engine = None
     __session = None
 
+
     def __init__(self):
         """Creates the engine to the database.
         """
@@ -34,6 +35,7 @@ class DBStorage:
 
         if getenv('HBNB_ENV') == 'test':
             Base.metadata.drop_all(self.__engine)
+
 
     def all(self, cls=None):
         """"manage dict all cls and entities"""
@@ -54,18 +56,22 @@ class DBStorage:
                     new_dict[key] = instance
         return (new_dict)
 
+
     def new(self, obj):
         """Add obj to the current database session."""
         self.__session.add(obj)
+
 
     def save(self):
         """Commit all changes to the current database session."""
         self.__session.commit()
 
+
     def delete(self, obj=None):
         """Delete obj from the current database session"""
         if obj is not None:
             self.__session.delete(obj)
+
 
     def reload(self):
         """Create all tables into database and initialize a new session"""
@@ -73,7 +79,9 @@ class DBStorage:
         Session = sessionmaker(bind=self.__engine, expire_on_commit=False)
         self.__session = scoped_session(Session)
 
+
     def close(self):
         """call remove() method on the private session attribute
         """
-        self.__session.close()
+        self.__session.remove()
+        
